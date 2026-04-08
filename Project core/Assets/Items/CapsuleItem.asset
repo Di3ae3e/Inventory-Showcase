@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2734ec5632ba3864f98daf8981117466, type: 3}
   m_Name: CapsuleItem
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 1512956427, guid: b1c8b39c0d1ed15489deb1b6d5b8602c, type: 3}
   itemName: capsule
   prefab: {fileID: 4247749404546388272, guid: 69a0ff4660a883043b729312b0044623, type: 3}
