@@ -5,10 +5,12 @@ public class InGameItem : MonoBehaviour, IInteractable
     public Item Item;
     public int ItemsCount = 1;
 
-    public event Action<InGameItem> OnItemInteracted;
-    public void Interact()
+    public static event Action<InGameItem> OnItemInteracted;
+    public void Interact(GameObject interactor)
     {
-        Debug.Log("Interacted");
-        OnItemInteracted?.Invoke(gameObject.GetComponent<InGameItem>());
+        if (interactor.TryGetComponent(out Inventory inventory))
+        {
+            inventory.AddItemToInventory(gameObject.GetComponent<InGameItem>());
+        }
     }
 }

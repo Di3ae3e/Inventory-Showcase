@@ -7,10 +7,19 @@ public class Inventory : MonoBehaviour
     [SerializeField] private int slotsCount = 1;
     private int selectedSlotIndex = 0;
 
-    public static event Action<RectTransform> OnActiveSlotChanged;
+    public static event Action<int> OnActiveSlotChanged;
+    public static event Action<int,InventorySlot> OnSlotInfoChanged;
 
     private List<InventorySlot> slots;
-    [SerializeField] private List<InventoryUISlot> uiSlot;
+
+    private void OnEnable()
+    {
+        InGameItem.OnItemInteracted += AddItemToInventory;
+    }
+    private void OnDisable()
+    {
+        InGameItem.OnItemInteracted -= AddItemToInventory;
+    }
     private void Awake()
     {
         slots = new List<InventorySlot>();
@@ -52,7 +61,7 @@ public class Inventory : MonoBehaviour
             if (slot.ItemInSlot == itemToAdd.Item)
             {
                 slot.ItemsInSlotCount += itemToAdd.ItemsCount;
-                uiSlot[slots.IndexOf(slot)].ItemIcon.sprite = itemToAdd.Item.Icon;
+                OnSlotInfoChanged?.Invoke(slots.IndexOf(slot), slot);
                 Destroy(itemToAdd.gameObject);
                 return;
             }
@@ -66,7 +75,7 @@ public class Inventory : MonoBehaviour
         {
             slots[indexOfFirstEmptySlot].ItemInSlot = itemToAdd.Item;
             slots[indexOfFirstEmptySlot].ItemsInSlotCount = itemToAdd.ItemsCount;
-            uiSlot[indexOfFirstEmptySlot].ItemIcon.sprite = itemToAdd.Item.Icon;
+            OnSlotInfoChanged?.Invoke(indexOfFirstEmptySlot, slots[indexOfFirstEmptySlot]);
             Destroy(itemToAdd.gameObject);
         }
         else
@@ -81,7 +90,8 @@ public class Inventory : MonoBehaviour
             Debug.Log($"{slots[selectedSlotIndex].ItemInSlot.name} has been dropped, Slot {selectedSlotIndex} is empty");
             slots[selectedSlotIndex].ItemInSlot = null;
             slots[selectedSlotIndex].ItemsInSlotCount = 0;
-            uiSlot[selectedSlotIndex].ItemIcon.sprite = null;
+
+            OnSlotInfoChanged?.Invoke(selectedSlotIndex, slots[selectedSlotIndex]);
         }
         else
         {
@@ -100,6 +110,6 @@ public class Inventory : MonoBehaviour
         {
             selectedSlotIndex = slots.Count - 1;
         }
-        OnActiveSlotChanged?.Invoke(uiSlot[selectedSlotIndex].GetComponent<RectTransform>());
+        OnActiveSlotChanged?.Invoke(selectedSlotIndex);
     }
 }

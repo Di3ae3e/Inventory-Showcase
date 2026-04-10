@@ -4,7 +4,7 @@ public class SlotPointer : MonoBehaviour
 {
     private void OnEnable()
     {
-        Inventory.OnActiveSlotChanged += UpdatePointer;
+        UISlots.OnActiveSlotChanged += UpdatePointer;
     }
     private void UpdatePointer(RectTransform slotPosition)
     {
