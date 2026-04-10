@@ -130,7 +130,6 @@ GameObject:
   - component: {fileID: 188146272}
   - component: {fileID: 188146274}
   - component: {fileID: 188146273}
-  - component: {fileID: 188146275}
   m_Layer: 5
   m_Name: pointer
   m_TagString: Untagged
@@ -195,18 +194,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 188146271}
   m_CullTransparentMesh: 1
---- !u!114 &188146275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 188146271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22f593e83c25c6a44a79bd479c7a34f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SlotPointer
 --- !u!1 &320257244
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,6 +922,7 @@ GameObject:
   - component: {fileID: 477941702}
   - component: {fileID: 477941701}
   - component: {fileID: 477941700}
+  - component: {fileID: 477941704}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -955,10 +943,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
   slotsCount: 3
-  uiSlot:
-  - {fileID: 1631354679}
-  - {fileID: 443292830}
-  - {fileID: 1634856374}
 --- !u!114 &477941701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,6 +973,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &477941704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477941699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abe8a40937aa2024f9332632400745a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
+  _UISlots:
+  - {fileID: 1631354679}
+  - {fileID: 443292830}
+  - {fileID: 1634856374}
+  pointerRTransform: {fileID: 188146272}
 --- !u!1 &505315966
 GameObject:
   m_ObjectHideFlags: 0
@@ -2028,8 +2029,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
   slotsCount: 1
-  uiSlot:
-  - {fileID: 1364092596}
 --- !u!4 &1555184172
 Transform:
   m_ObjectHideFlags: 0
