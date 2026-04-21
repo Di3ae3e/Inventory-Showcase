@@ -1,9 +1,8 @@
 using UnityEngine;
-
 public class Player : MonoBehaviour
 {
     [SerializeField] private LayerMask interactableLayerMask;
-
+    private string interactedObject;
     private void Update()
     {
         if (Input.GetButtonDown("Fire1"))
@@ -11,14 +10,13 @@ public class Player : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 100, interactableLayerMask))
             {
-                if (hit.collider != null)
-                {
-                    if (hit.collider.TryGetComponent(out IInteractable interactable))
-                    {
-                        interactable.Interact(gameObject);
-                    }
-                }
+                if (hit.collider == null) return;
 
+                if (hit.collider.TryGetComponent(out IInteractable interactable))
+                {
+                    interactedObject = hit.transform.name;
+                    interactable.Interact(gameObject);
+                }
             }
         }
     }

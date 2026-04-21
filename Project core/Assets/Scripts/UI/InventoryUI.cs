@@ -3,23 +3,43 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
+    [SerializeField] private Inventory targetInventory;
     [SerializeField] private List<InventoryUISlot> _UISlots;
-    [SerializeField] private RectTransform pointerRTransform;
-
+    [SerializeField] private RectTransform pointerRectTransform;
+    private List<RectTransform> slotsRectTransform;
     private void OnEnable()
     {
-        Inventory.OnSlotInfoChanged += UpdateSlot;
-        Inventory.OnActiveSlotChanged += PointerUpdate;
+        if (targetInventory == null)
+        {
+            return;
+        }
+        targetInventory.OnSlotInfoChanged += UpdateSlot;
+        targetInventory.OnSlotSelected += PointerUpdate;
     }
 
     private void OnDisable()
     {
-        Inventory.OnSlotInfoChanged -= UpdateSlot;
-        Inventory.OnActiveSlotChanged -= PointerUpdate;
+        if (targetInventory != null)
+        {
+            targetInventory.OnSlotInfoChanged -= UpdateSlot;
+            targetInventory.OnSlotSelected -= PointerUpdate;
+        }
+    }
+    private void Awake()
+    {
+        slotsRectTransform = new List<RectTransform>(_UISlots.Count);
+        for (int i = 0; i < _UISlots.Count; i++)
+        {
+            slotsRectTransform.Add(_UISlots[i].GetComponent<RectTransform>());
+        }
     }
     private void UpdateSlot(int slotIndex, InventorySlot slot)
     {
-        _UISlots[slotIndex].CountText.text = slot.ItemsInSlotCount.ToString();
+        if (slot.ItemsInSlotCount == 0)
+            _UISlots[slotIndex].CountText.SetText("");
+        else
+            _UISlots[slotIndex].CountText.SetText(slot.ItemsInSlotCount.ToString());
+
         if (slot.ItemInSlot == null)
             _UISlots[slotIndex].ItemIcon.sprite = null;
         else
@@ -28,6 +48,6 @@ public class InventoryUI : MonoBehaviour
 
     private void PointerUpdate(int slotIndex)
     {
-        pointerRTransform.position = _UISlots[slotIndex].GetComponent<RectTransform>().position;
+        pointerRectTransform.position = slotsRectTransform[slotIndex].position;
     }
 }

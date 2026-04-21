@@ -7,19 +7,19 @@ public class Inventory : MonoBehaviour
     [SerializeField] private int slotsCount = 1;
     private int selectedSlotIndex = 0;
 
-    public static event Action<int> OnActiveSlotChanged;
-    public static event Action<int,InventorySlot> OnSlotInfoChanged;
+    public event Action<int> OnSlotSelected;
+    public event Action<int,InventorySlot> OnSlotInfoChanged;
 
     private List<InventorySlot> slots;
 
-    private void OnEnable()
-    {
-        InGameItem.OnItemInteracted += AddItemToInventory;
-    }
-    private void OnDisable()
-    {
-        InGameItem.OnItemInteracted -= AddItemToInventory;
-    }
+    //private void OnEnable()
+    //{
+    //    InGameItem.OnItemInteracted += AddItemToInventory;
+    //}
+    //private void OnDisable()
+    //{
+    //    InGameItem.OnItemInteracted -= AddItemToInventory;
+    //}
     private void Awake()
     {
         slots = new List<InventorySlot>();
@@ -34,60 +34,46 @@ public class Inventory : MonoBehaviour
         {
             SlotSelect();
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            foreach (InventorySlot slot in slots)
-            {
-                if (slot.ItemInSlot != null)
-                {
-                    Debug.Log($"Slot {slots.IndexOf(slot)} contatins {slot.ItemInSlot.ItemName} in quantity {slot.ItemsInSlotCount}");
-                }
-                else
-                {
-                    Debug.LogWarning($"<color=yellow> Slot {slots.IndexOf(slot)} is empty!");
-                }
-            }
-        }
         if (Input.GetKeyDown(KeyCode.Q))
             RemoveItem();
     }
-    public void AddItemToInventory(InGameItem itemToAdd)
+    public bool IsItemAddedToInventory(Item itemToAdd, int amount)
     {
         int indexOfFirstEmptySlot = -1;
         bool hasEmptySlots = false;
-        foreach (InventorySlot slot in slots)
+        //foreach (InventorySlot slot in slots)
+        for(int i = 0; i < slotsCount; i++)
         {
-            if (slot.ItemInSlot == itemToAdd.Item)
+            if (slots[i].ItemInSlot == itemToAdd)
             {
-                slot.ItemsInSlotCount += itemToAdd.ItemsCount;
-                OnSlotInfoChanged?.Invoke(slots.IndexOf(slot), slot);
-                Destroy(itemToAdd.gameObject);
-                return;
+                slots[i].ItemsInSlotCount += amount;
+                OnSlotInfoChanged?.Invoke(i, slots[i]);
+                return true;
             }
-            else if (slot.ItemInSlot == null && indexOfFirstEmptySlot == -1)
+            else if (slots[i].ItemInSlot == null && indexOfFirstEmptySlot == -1)
             {
-                indexOfFirstEmptySlot = slots.IndexOf(slot);
+                indexOfFirstEmptySlot = i;
                 hasEmptySlots = true;
             }
         }
         if (hasEmptySlots)
         {
-            slots[indexOfFirstEmptySlot].ItemInSlot = itemToAdd.Item;
-            slots[indexOfFirstEmptySlot].ItemsInSlotCount = itemToAdd.ItemsCount;
+            slots[indexOfFirstEmptySlot].ItemInSlot = itemToAdd;
+            slots[indexOfFirstEmptySlot].ItemsInSlotCount = amount;
             OnSlotInfoChanged?.Invoke(indexOfFirstEmptySlot, slots[indexOfFirstEmptySlot]);
-            Destroy(itemToAdd.gameObject);
+
+            return true;
         }
         else
         {
             Debug.LogWarning("<color=red>No Empty Slots!</color>");
+            return false;
         }
     }
     public void RemoveItem()
     {
         if (slots[selectedSlotIndex].ItemInSlot != null)
         {
-            Debug.Log($"{slots[selectedSlotIndex].ItemInSlot.name} has been dropped, Slot {selectedSlotIndex} is empty");
             slots[selectedSlotIndex].ItemInSlot = null;
             slots[selectedSlotIndex].ItemsInSlotCount = 0;
 
@@ -110,6 +96,11 @@ public class Inventory : MonoBehaviour
         {
             selectedSlotIndex = slots.Count - 1;
         }
-        OnActiveSlotChanged?.Invoke(selectedSlotIndex);
+        OnSlotSelected?.Invoke(selectedSlotIndex);
+    }
+    public bool IsManagedToPickUp()
+    {
+        bool isManagedToPickUp = false;
+        return isManagedToPickUp;
     }
 }

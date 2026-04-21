@@ -6,17 +6,17 @@ public class UISlots : MonoBehaviour
     [SerializeField] private List<InventoryUISlot> _UISlots;
 
     public static event Action<RectTransform> OnActiveSlotChanged;
-    private void OnEnable()
-    {
-        Inventory.OnSlotInfoChanged += UpdateSlot;
-        Inventory.OnActiveSlotChanged += PointerUpdate;
-    }
+    //private void OnEnable()
+    //{
+    //    Inventory.OnSlotInfoChanged += UpdateSlot;
+    //    Inventory.OnSlotSelected += PointerUpdate;
+    //}
 
-    private void OnDisable()
-    {
-        Inventory.OnSlotInfoChanged -= UpdateSlot;
-        Inventory.OnActiveSlotChanged += PointerUpdate;
-    }
+    //private void OnDisable()
+    //{
+    //    Inventory.OnSlotInfoChanged -= UpdateSlot;
+    //    Inventory.OnSlotSelected += PointerUpdate;
+    //}
     private void UpdateSlot(int slotIndex, InventorySlot slot)
     {
         _UISlots[slotIndex].CountText.text = slot.ItemsInSlotCount.ToString();
