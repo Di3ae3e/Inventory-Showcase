@@ -74,7 +74,7 @@ Handles:
 - 
 ---
 
-## 📦 Use Cases
+## Use Cases
 
 This system can be used as a base for:
 
