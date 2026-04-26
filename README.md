@@ -46,7 +46,7 @@ Items are defined using ScriptableObjects:
 - Item name
 - Icon
 - Stack size
-- 
+
 ---
 
 ### Inventory Controller
@@ -71,7 +71,7 @@ Handles:
 - Separation of concerns
 - Event-driven programming
 - Data-driven design
-- 
+
 ---
 
 ## Use Cases
