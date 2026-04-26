@@ -6,10 +6,10 @@ public class Item : ScriptableObject
     [SerializeField] private string itemName;
     [SerializeField] private GameObject prefab;
     [SerializeField] private bool isStacable = true;
-    [SerializeField] private int stackSize = 1;
+    [SerializeField] private int maxStackSize = 1;
 
     public Sprite Icon => icon;
     public string ItemName => itemName;
-    public bool IsStacable => isStacable;
-    public int StackSize => stackSize;
+    public bool IsStackable => isStacable;
+    public int MaxStackSize => maxStackSize;
 }

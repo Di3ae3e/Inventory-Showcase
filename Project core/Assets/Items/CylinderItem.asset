@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item
   icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   itemName: Cylinder
-  prefab: {fileID: 0}
+  prefab: {fileID: 1198705614654578678, guid: 6381173f8d73c414eada595d6da8ac92, type: 3}
+  isStacable: 0
+  maxStackSize: 2

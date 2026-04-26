@@ -15,3 +15,5 @@ MonoBehaviour:
   icon: {fileID: 850950576, guid: b1c8b39c0d1ed15489deb1b6d5b8602c, type: 3}
   itemName: sphere
   prefab: {fileID: 6627098537228191924, guid: ccaca128a2d19ba4a90699d610c294aa, type: 3}
+  isStacable: 1
+  stackSize: 5

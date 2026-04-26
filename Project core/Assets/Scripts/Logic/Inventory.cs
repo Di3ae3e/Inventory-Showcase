@@ -8,18 +8,10 @@ public class Inventory : MonoBehaviour
     private int selectedSlotIndex = 0;
 
     public event Action<int> OnSlotSelected;
-    public event Action<int,InventorySlot> OnSlotInfoChanged;
+    public event Action<int, InventorySlot> OnSlotInfoChanged;
 
     private List<InventorySlot> slots;
 
-    //private void OnEnable()
-    //{
-    //    InGameItem.OnItemInteracted += AddItemToInventory;
-    //}
-    //private void OnDisable()
-    //{
-    //    InGameItem.OnItemInteracted -= AddItemToInventory;
-    //}
     private void Awake()
     {
         slots = new List<InventorySlot>();
@@ -37,38 +29,58 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
             RemoveItem();
     }
-    public bool IsItemAddedToInventory(Item itemToAdd, int amount)
+    public int GetAddedCount(Item itemToAdd, int amount)
     {
-        int indexOfFirstEmptySlot = -1;
-        bool hasEmptySlots = false;
-        //foreach (InventorySlot slot in slots)
-        for(int i = 0; i < slotsCount; i++)
+        int addedItemsAmount = 0;
+        for (int i = 0; i < slotsCount; i++)
         {
             if (slots[i].ItemInSlot == itemToAdd)
             {
-                slots[i].ItemsInSlotCount += amount;
-                OnSlotInfoChanged?.Invoke(i, slots[i]);
-                return true;
-            }
-            else if (slots[i].ItemInSlot == null && indexOfFirstEmptySlot == -1)
-            {
-                indexOfFirstEmptySlot = i;
-                hasEmptySlots = true;
+                int added = GetAddedItemsInSlot(itemToAdd, amount, i);
+                addedItemsAmount += added;
+                amount -= added;
             }
         }
-        if (hasEmptySlots)
+        if (amount != 0)
         {
-            slots[indexOfFirstEmptySlot].ItemInSlot = itemToAdd;
-            slots[indexOfFirstEmptySlot].ItemsInSlotCount = amount;
-            OnSlotInfoChanged?.Invoke(indexOfFirstEmptySlot, slots[indexOfFirstEmptySlot]);
+            for (int i = 0; i < slotsCount; i++)
+            {
+                if (slots[i].ItemInSlot != null) continue;
 
-            return true;
+                int added = GetAddedItemsInSlot(itemToAdd, amount, i);
+                addedItemsAmount += added;
+                amount -= added;
+                if (amount == 0)
+                    break;
+            }
+        }
+        return addedItemsAmount;
+    }
+    private int GetAddedItemsInSlot(Item item, int amount, int slotIndex)
+    {
+        int addedAmount = 0;
+        if (amount == 0) return 0;
+
+        if (slots[slotIndex].ItemInSlot == null)
+            slots[slotIndex].ItemInSlot = item;
+        else if (slots[slotIndex].ItemInSlot != item)
+        {
+            return 0;
+        }
+        int remainingSpace = slots[slotIndex].ItemInSlot.MaxStackSize - slots[slotIndex].ItemsInSlotCount;
+        if (amount < remainingSpace)
+        {
+            slots[slotIndex].ItemsInSlotCount += amount;
+            addedAmount += amount;
         }
         else
         {
-            Debug.LogWarning("<color=red>No Empty Slots!</color>");
-            return false;
+            slots[slotIndex].ItemsInSlotCount += remainingSpace;
+            addedAmount += remainingSpace;
         }
+
+        OnSlotInfoChanged?.Invoke(slotIndex, slots[slotIndex]);
+        return addedAmount;
     }
     public void RemoveItem()
     {
@@ -97,10 +109,5 @@ public class Inventory : MonoBehaviour
             selectedSlotIndex = slots.Count - 1;
         }
         OnSlotSelected?.Invoke(selectedSlotIndex);
-    }
-    public bool IsManagedToPickUp()
-    {
-        bool isManagedToPickUp = false;
-        return isManagedToPickUp;
     }
 }

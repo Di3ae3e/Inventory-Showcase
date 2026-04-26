@@ -8,14 +8,17 @@ public class InGameItem : MonoBehaviour, IInteractable
     public static event Action<InGameItem> OnItemInteracted;
     private void OnEnable()
     {
-        if(ItemsCount > Item.StackSize)
-            ItemsCount = Item.StackSize;
+        if (ItemsCount > Item.MaxStackSize)
+            ItemsCount = Item.MaxStackSize;
     }
     public void Interact(GameObject interactor)
     {
         if (interactor.TryGetComponent(out Inventory inventory))
         {
-            if (inventory.IsItemAddedToInventory(Item, ItemsCount))
+            int addedItemsCount = inventory.GetAddedCount(Item, ItemsCount);
+
+            ItemsCount -= addedItemsCount;
+            if (ItemsCount == 0)
             {
                 Destroy(gameObject);
             }
