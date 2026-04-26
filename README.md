@@ -6,6 +6,12 @@ The system is designed for scalability, reusability, and decoupling between game
 
 ---
 
+## Demo
+
+![2026-04-0918-30-34-ezgif com-crop](https://github.com/user-attachments/assets/887efb5e-613f-45c4-9b0c-1f1ab2657e8b)
+
+---
+
 ## Key Features
 
 - **Data-driven items** using ScriptableObjects
@@ -91,12 +97,6 @@ This system can be used as a base for:
 - ScriptableObjects
 - C# Events / Actions / Interfaces
 - Unity UI (UGUI)
-
----
-
-## Demo
-
-![2026-04-0918-30-34-ezgif com-crop](https://github.com/user-attachments/assets/887efb5e-613f-45c4-9b0c-1f1ab2657e8b)
 
 ---
 
